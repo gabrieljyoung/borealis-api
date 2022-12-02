@@ -52,19 +52,19 @@ DROP TABLE IF EXISTS `sections`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sections` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `course` varchar(9) NOT NULL,
+  `course_code` varchar(9) NOT NULL,
   `type` enum('A','B','D') NOT NULL DEFAULT 'A',
   `num` tinyint unsigned NOT NULL DEFAULT '1',
-  `code` varchar(13) GENERATED ALWAYS AS (concat(`course`,_utf8mb4' ',`type`,`num`)) STORED,
+  `section_code` varchar(13) GENERATED ALWAYS AS (concat(`course_code`,_utf8mb4' ',`type`,`num`)) STORED,
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
   `start_time` time DEFAULT NULL,
   `end_time` time DEFAULT NULL,
   `weekdays` set('Mon','Tue','Wed','Thu','Fri','Sat','Sun') DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`),
-  KEY `course` (`course`),
-  CONSTRAINT `sections_fk_course_code` FOREIGN KEY (`course`) REFERENCES `courses` (`code`),
+  UNIQUE KEY `code` (`section_code`),
+  KEY `course` (`course_code`),
+  CONSTRAINT `sections_fk_course_code` FOREIGN KEY (`course_code`) REFERENCES `courses` (`code`),
   CONSTRAINT `sections_check_dates` CHECK ((`start_date` <= `end_date`)),
   CONSTRAINT `sections_end_time_max` CHECK ((`end_time` < '24:00:00')),
   CONSTRAINT `sections_end_time_min` CHECK ((`end_time` >= '00:00:00')),
@@ -80,7 +80,7 @@ CREATE TABLE `sections` (
 
 LOCK TABLES `sections` WRITE;
 /*!40000 ALTER TABLE `sections` DISABLE KEYS */;
-INSERT INTO `sections` (`id`, `course`, `type`, `num`, `start_date`, `end_date`, `start_time`, `end_time`, `weekdays`) VALUES (10007,'ACC 1010','A',1,'2022-01-09','2022-04-14','13:00:00','14:30:00','Mon,Wed'),(10008,'ACC 1010','A',2,'2022-01-09','2022-04-14','08:30:00','10:00:00','Mon,Wed'),(10009,'ACC 1010','B',1,'2022-01-09','2022-04-14','10:00:00','11:30:00','Fri'),(10010,'ACC 1010','B',2,'2022-01-09','2022-04-14','12:30:00','14:00:00','Fri'),(10011,'ACC 1010','B',3,'2022-01-09','2022-04-14','15:00:00','16:30:00','Fri'),(10012,'COMP 1010','A',1,'2022-01-09','2022-04-14','08:30:00','09:30:00','Mon,Wed,Fri'),(10013,'COMP 1010','A',2,'2022-01-09','2022-04-14','12:00:00','13:30:00','Tue,Thu'),(10014,'COMP 1020','A',1,'2022-01-09','2022-04-14','10:30:00','12:00:00','Mon,Wed,Fri'),(10015,'COMP 2140','A',1,'2022-01-09','2022-04-14','12:00:00','14:00:00','Tue,Fri'),(10016,'ECON 2300','A',1,'2022-01-09','2022-04-14','18:00:00','21:00:00','Thu'),(10017,'ECON 2300','A',2,'2022-01-09','2022-04-14','18:00:00','21:00:00','Fri'),(10018,'ECON 2400','A',1,'2022-01-09','2022-04-14','13:00:00','14:30:00','Mon,Fri'),(10019,'ECON 2400','A',2,'2022-01-09','2022-04-14','13:00:00','14:30:00','Tue,Thu'),(10020,'HIST 1411','A',1,'2022-01-09','2022-04-14','15:30:00','17:00:00','Wed,Fri'),(10021,'HIST 1412','A',1,'2022-01-09','2022-04-14','15:30:00','17:00:00','Tue,Thu'),(10022,'HIST 4800','A',1,'2022-01-09','2022-04-14','12:00:00','15:00:00','Mon'),(10023,'HIST 4800','A',2,'2022-01-09','2022-04-14','12:00:00','15:00:00','Fri'),(10024,'MATH 1100','A',1,'2022-01-09','2022-04-14','13:30:00','14:30:00','Mon,Wed,Fri'),(10025,'MATH 1200','A',1,'2022-01-09','2022-04-14','08:30:00','10:00:00','Mon,Thu'),(10026,'MATH 1200','A',2,'2022-01-09','2022-04-14','08:30:00','10:00:00','Tue,Fri'),(10027,'SCI 2000','A',1,'2022-01-09','2022-04-14','09:00:00','12:00:00','Sat');
+INSERT INTO `sections` (`id`, `course_code`, `type`, `num`, `start_date`, `end_date`, `start_time`, `end_time`, `weekdays`) VALUES (10007,'ACC 1010','A',1,'2022-01-09','2022-04-14','13:00:00','14:30:00','Mon,Wed'),(10008,'ACC 1010','A',2,'2022-01-09','2022-04-14','08:30:00','10:00:00','Mon,Wed'),(10009,'ACC 1010','B',1,'2022-01-09','2022-04-14','10:00:00','11:30:00','Fri'),(10010,'ACC 1010','B',2,'2022-01-09','2022-04-14','12:30:00','14:00:00','Fri'),(10011,'ACC 1010','B',3,'2022-01-09','2022-04-14','15:00:00','16:30:00','Fri'),(10012,'COMP 1010','A',1,'2022-01-09','2022-04-14','08:30:00','09:30:00','Mon,Wed,Fri'),(10013,'COMP 1010','A',2,'2022-01-09','2022-04-14','12:00:00','13:30:00','Tue,Thu'),(10014,'COMP 1020','A',1,'2022-01-09','2022-04-14','10:30:00','12:00:00','Mon,Wed,Fri'),(10015,'COMP 2140','A',1,'2022-01-09','2022-04-14','12:00:00','14:00:00','Tue,Fri'),(10016,'ECON 2300','A',1,'2022-01-09','2022-04-14','18:00:00','21:00:00','Thu'),(10017,'ECON 2300','A',2,'2022-01-09','2022-04-14','18:00:00','21:00:00','Fri'),(10018,'ECON 2400','A',1,'2022-01-09','2022-04-14','13:00:00','14:30:00','Mon,Fri'),(10019,'ECON 2400','A',2,'2022-01-09','2022-04-14','13:00:00','14:30:00','Tue,Thu'),(10020,'HIST 1411','A',1,'2022-01-09','2022-04-14','15:30:00','17:00:00','Wed,Fri'),(10021,'HIST 1412','A',1,'2022-01-09','2022-04-14','15:30:00','17:00:00','Tue,Thu'),(10022,'HIST 4800','A',1,'2022-01-09','2022-04-14','12:00:00','15:00:00','Mon'),(10023,'HIST 4800','A',2,'2022-01-09','2022-04-14','12:00:00','15:00:00','Fri'),(10024,'MATH 1100','A',1,'2022-01-09','2022-04-14','13:30:00','14:30:00','Mon,Wed,Fri'),(10025,'MATH 1200','A',1,'2022-01-09','2022-04-14','08:30:00','10:00:00','Mon,Thu'),(10026,'MATH 1200','A',2,'2022-01-09','2022-04-14','08:30:00','10:00:00','Tue,Fri'),(10027,'SCI 2000','A',1,'2022-01-09','2022-04-14','09:00:00','12:00:00','Sat');
 /*!40000 ALTER TABLE `sections` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -144,4 +144,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-12-02 12:50:34
+-- Dump completed on 2022-12-02 15:13:14
