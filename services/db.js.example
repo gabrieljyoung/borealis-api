@@ -1,0 +1,16 @@
+/**
+ * DATABASE INITIALIZATION FILE (EXAMPLE)
+ * Establishes connection to database.
+ */
+
+ const mysql = require('mysql');
+ const conn = mysql.createConnection({
+         host: "localhost",
+         user: "<insert_username_here>",
+         password: "<insert_password_here>",
+         database: "<insert_database_name_here>",
+ });
+ 
+ conn.connect();
+ 
+ module.exports = conn;

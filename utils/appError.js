@@ -1,3 +1,10 @@
+/**
+ * APP ERROR CLASS
+ * Contains general information on errors arising throughout
+ * the middleware.
+ */
+
+
 class AppError extends Error {
 	
 	constructor(msg, statusCode) {

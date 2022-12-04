@@ -1,5 +1,8 @@
+/**
+ * MAIN APPLICATION FILE
+ */
+
 const express = require("express");
-//const cors = require("cors");
 const bodyParser = require("body-parser")
 const router = require("./routes");
 const AppError = require("./utils/appError");
@@ -15,17 +18,16 @@ app.use(bodyParser.json())
 // Import API routes from routes/index.js
 app.use('/', router);
 
-// Check for missing URLs and throw 404 error
+// 404 anything that falls through the routes in router
 app.all("*", (req, res, next) => {
-	next(new AppError(`The URL ${req.originalUrl} does not exist`, 404));
+    next(new AppError(`The URL ${req.originalUrl} does not exist`, 404));
 });
 
+// Handle any errors from router or 404 above, and send response
 app.use(errorHandler);
 
 
-app.listen(PORT, () => {
-	console.log(`server running on port ${PORT}`);
+const server = app.listen(PORT, () => {
+    console.log(`server running on port ${PORT}`);
 });
-
-module.exports = app;
 
