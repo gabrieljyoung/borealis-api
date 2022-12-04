@@ -7,6 +7,9 @@
 const AppError = require("../utils/appError");
 const db = require("../services/db");
 
+const GET_COURSES_COLS  = "c.*, COUNT(s.section_code) AS num_sections";
+const GET_SECTIONS_COLS = "section_code, c.name, start_date, end_date, start_time, end_time, weekdays";
+
 
 /*********************************
  Courses - user operations
@@ -15,12 +18,14 @@ const db = require("../services/db");
 // GET from /courses
 exports.getAllCourses = (req, res, next) => {
 
+    let filterStr = "";
+    if (req.filters)
+        filterStr = `WHERE ${req.filters}`;
+
     db.query(
-        // View defined to get all course info plus the number of sections for each
-        "SELECT * FROM get_all_courses",
+        `SELECT ${GET_COURSES_COLS} FROM courses c LEFT OUTER JOIN sections s ON (s.course_code = c.code) ${filterStr} GROUP BY c.code`,
 
         function (err, data, fields) {
-
             if (err) return next(new AppError(err));
 
             res.status(200).json({
@@ -35,8 +40,12 @@ exports.getAllCourses = (req, res, next) => {
 // GET from /courses/<id>
 exports.getCourse = (req, res, next) => {
 
+    let filterStr = "WHERE code = ?"; // filled in by req.params.id below
+    if (req.filters)
+        filterStr += ` AND ${req.filters}`;
+
     db.query(
-        "SELECT * FROM get_all_courses WHERE code = ?",
+        `SELECT ${GET_COURSES_COLS} FROM courses c LEFT OUTER JOIN sections s ON (s.course_code = c.code) ${filterStr} GROUP BY c.code`,
         [req.params.id],
 
         function (err, data, fields) {
@@ -130,9 +139,12 @@ exports.deleteCourse = (req, res, next) => {
 // GET from /sections
 exports.getAllSections = (req, res, next) => {
 
+    let filterStr = "";
+    if (req.filters)
+        filterStr = ` WHERE ${req.filters}`;
+
     db.query(
-        // View defined to get non-redundant info about sections, plus the associated course name
-        "SELECT * FROM get_all_sections",
+        `SELECT ${GET_SECTIONS_COLS} FROM sections s JOIN courses c ON (c.code = s.course_code)${filterStr}`,
 
         function (err, data, fields) {
 
@@ -151,8 +163,12 @@ exports.getAllSections = (req, res, next) => {
 // GET from /sections/<id>
 exports.getSection = (req, res, next) => {
 
+    let filterStr = "WHERE id = ?"; // filled in by req.params.id below
+    if (req.filters)
+        filterStr += ` ${req.filters}`;
+
     db.query(
-        "SELECT * FROM get_all_sections WHERE id = ?",
+        `SELECT ${GET_SECTIONS_COLS} FROM sections s JOIN courses c ON (c.code = s.course_code) ${filterStr}`,
         [req.params.id],
 
         function (err, data, fields) {
