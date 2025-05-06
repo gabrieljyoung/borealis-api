@@ -7,28 +7,29 @@
 
 const express = require("express");
 const controllers = require("../controllers");
+const filters = require("../controllers/filters");
 const router = express.Router();
 
 
 router
     .route("/courses")
-    .get(controllers.getAllCourses)
+    .get(filters.parseFiltersFromBody, controllers.getAllCourses)
     .post(controllers.createCourse);    // admin only
 
 router
     .route("/courses/:id")
-    .get(controllers.getCourse)
+    .get(filters.parseFiltersFromBody, controllers.getCourse)
     .put(controllers.updateCourse)      // admin only
     .delete(controllers.deleteCourse);  // admin only
 
 router
     .route("/sections")
-    .get(controllers.getAllSections)
+    .get(filters.parseFiltersFromBody, controllers.getAllSections)
     .post(controllers.createSection);   // admin only
 
 router
     .route("/sections/:id")
-    .get(controllers.getSection)
+    .get(filters.parseFiltersFromBody, controllers.getSection)
     .put(controllers.updateSection)     // admin only
     .delete(controllers.deleteSection); // admin only
     
